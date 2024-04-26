@@ -1,0 +1,17 @@
+{
+  "name": "gcloud-otlp-poc",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "repository": "https://github.com/ethanrcohen/gcloud-otlp-poc.git",
+  "scripts": {
+    "build": "tsc",
+    "start": "node lib/index.js"
+  },
+  "author": "Ethan Cohen <ecohen56@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@pulumi/gcp": "^7.20.0",
+    "pulumi": "^0.0.1"
+  }
+}
