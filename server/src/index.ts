@@ -8,6 +8,20 @@ initializeOpenTelemetry({
 
 import express from "express";
 import opentelemetry from "@opentelemetry/api";
+import { buildSchema } from "graphql";
+import { createHandler } from "graphql-http";
+
+const schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+`);
+
+const root = {
+    hello() {
+        return "Hello world!";
+    },
+};
 
 async function start() {
     const { PORT } = process.env;
@@ -23,6 +37,14 @@ async function start() {
         testCounter.add(1);
         res.send("Hello World");
     });
+
+    app.post(
+        "/graphql",
+        createHandler({
+            schema: schema,
+            rootValue: root,
+        })
+    );
 
     app.listen(port);
     console.log(`server ready at http://localhost:${port}`);
