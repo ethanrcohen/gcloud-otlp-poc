@@ -1,0 +1,26 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: otel-test
+  annotations:
+    run.googleapis.com/launch-stage: BETA
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/container-dependencies: "{app:[collector]}"
+    spec:
+      containers:
+      - image: us-east1-docker.pkg.dev/infra-pocs/run-otel/sample-metrics-app
+        name: app
+        ports:
+        - containerPort: 4000
+        env:
+        - name: "OTEL_EXPORTER_OTLP_ENDPOINT"
+          value: "http://localhost:4318"
+      - image: us-east1-docker.pkg.dev/infra-pocs/run-otel/otel-collector-metrics
+        name: collector
+        startupProbe:
+          httpGet:
+            path: /
+            port: 13133
