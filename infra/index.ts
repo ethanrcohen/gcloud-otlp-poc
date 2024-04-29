@@ -8,6 +8,10 @@ const envs = [
         value: "test-service",
     },
     {
+        name: "NODE_ENV",
+        value: "production",
+    },
+    {
         name: "SERVICE_VERSION",
         value: "1.0.0",
     },

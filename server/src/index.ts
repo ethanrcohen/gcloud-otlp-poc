@@ -8,7 +8,6 @@ initializeOpenTelemetry({
 
 import express from "express";
 import opentelemetry from "@opentelemetry/api";
-import { createHandler } from "graphql-http";
 import { createYoga } from "graphql-yoga";
 import { schema } from "./schema";
 
