@@ -8,24 +8,14 @@ initializeOpenTelemetry({
 
 import express from "express";
 import opentelemetry from "@opentelemetry/api";
-import { buildSchema } from "graphql";
 import { createHandler } from "graphql-http";
-
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
-
-const root = {
-    hello() {
-        return "Hello world!";
-    },
-};
+import { createYoga } from "graphql-yoga";
+import { schema } from "./schema";
 
 async function start() {
     const { PORT } = process.env;
 
+    const yoga = createYoga({ schema });
     const testCounter = opentelemetry.metrics
         .getMeter("default")
         .createCounter("hello-world");
@@ -38,13 +28,7 @@ async function start() {
         res.send("Hello World");
     });
 
-    app.post(
-        "/graphql",
-        createHandler({
-            schema: schema,
-            rootValue: root,
-        })
-    );
+    app.post("/graphql", (req, res) => yoga.handle(req, res));
 
     app.listen(port);
     console.log(`server ready at http://localhost:${port}`);
